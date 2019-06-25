@@ -1,0 +1,6 @@
+.idea
+*.pyc
+*/migrations/0*
+db.sqlite3
+*_wip.*
+*_prod.*

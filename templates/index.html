@@ -1,0 +1,94 @@
+{% extends 'common/base.html' %}
+
+{% load app_extras %}
+
+{% block content %}
+<table border="0" cellpadding="0" cellspacing="0" class="itemlist">
+
+  <!-- repeat this block n times-->
+  {% for post in posts %}
+
+  <tr class='athing' id={{ post.id }}>
+    <td align="right" class="title" valign="top"><span class="rank">{{ forloop.counter|add:counter_init }}.</span>
+    </td>
+    <td class="votelinks" valign="top">
+      <div class="center">
+        {% ifequal post.user request.user %}
+        <span class="asterisk">*</span><br>
+        <div style="width: 14px; height: 1px"></div>
+        {% else %}
+        {% if post.id in tracking %}
+        <a id="up_{{ post.id }}" onclick="upvotePost(this)">
+          <div class='votearrow' title='upvote'
+               style='visibility: hidden'></div>
+        </a>
+        {% else %}
+        <a id="up_{{ post.id }}" onclick="upvotePost(this)" style="cursor: pointer">
+          <div class='votearrow' title='upvote'></div>
+        </a>
+        {% endif %}
+        {% endifequal %}
+      </div>
+    </td>
+    <td class="title">
+      {% if post.url %}
+      <a href="{{ post.url }}" title="{{ post.title }}" id="title_{{ post.id }}" class="storylink">{{ post.title }}</a>
+      {% else %}
+      <a href="{% url 'post' post_id=post.id %}" class="storylink">{{ post.title }}</a>
+      {% endif %}
+      <span class="sitebit comhead"> (<a href="{% url 'site' site=post.site %}"><span
+          class="sitestr">{{ post.site }}</span></a>)</span>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2"></td>
+    <td class="subtext">
+
+      <span class="score" id="score_{{ post.id }}">
+        {{ post.votes }} point{{ post.votes|pluralize }}</span> by
+      <a class="hnuser" href="{% url 'profile' user_id=post.user.id %}">{{ post.user.username }}</a>
+      <a class="age" href="{% url 'post' post_id=post.id %}">{{ post.time_from_post }}</a> |
+      <a href="{% url 'post' post_id=post.id %}">
+        {% if post.comment_set.exists %}
+        {{ post.comment_set.count }} comment{{ post.comment_set.count|pluralize }}
+        {% else %}
+        discuss
+        {% endif %}
+      </a>
+      {% ifequal post.user request.user %}
+      | <a href="{% url 'post_edit' post_id=post.id %}">edit</a> |
+      <a href="{% url 'post_delete' post_id=post.id %}">delete</a>
+      {% endifequal %}
+    </td>
+  </tr>
+
+  <tr class="spacer" style="height:5px"></tr>
+
+  {% endfor %}
+  <!-- repeat this block n times-->
+
+  <tr class="morespace" style="height:10px"></tr>
+  <tr>
+    <td colspan="2"></td>
+    <td class="title"><a class="morelink"
+                         href="{% if category == 'new' %}
+                         {% url 'new_more' page=page %}
+                         {% elif category == 'ask' %}
+                         {% url 'ask_more' page=page %}
+                         {% elif category == 'show' %}
+                         {% url 'show_more' page=page %}
+                         {% elif category == 'submissions' %}
+                         {% url 'submissions_more' user_id=user_id page=page %}
+                         {% elif category == 'comments' %}
+                         {% url 'comments_more' user_id=user_id page=page %}
+                         {% elif category == 'site' and site %}
+                         {% url 'site_more' site=site page=page %}
+                         {% else %}
+                         {% url 'more' page=page %}
+                         {% endif %}"
+                         rel="next">More</a></td>
+  </tr>
+
+</table>
+{% endblock %}

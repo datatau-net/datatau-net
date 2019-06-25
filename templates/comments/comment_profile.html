@@ -1,0 +1,20 @@
+{% extends 'common/base.html' %}
+
+{% block content_header %}
+<tr id="pagespace" style="height:10px" title="Comments"></tr>
+{% endblock %}
+
+{% block content %}
+<table border="0" class='comment-tree'>
+  {% include "comments/comments_tree.html" %}
+</table>
+<table border="0" class='comment-tree'>
+  <tr class="morespace" style="height:10px"></tr>
+  <tr>
+    <td colspan="2"></td>
+    <td class="title"><a class="morelink"
+                         href="{% url 'comments_more' user_id=user_id page=page %}"
+                         rel="next">More</a></td>
+  </tr>
+</table>
+{% endblock %}

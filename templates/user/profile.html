@@ -1,0 +1,56 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+
+<tr>
+  <td>
+    <form class="profileform" method="post" action="{% url 'update_profile' user_id=user_id %}">
+      {% csrf_token %}
+
+      <table border="0">
+        <tr class='athing'>
+          <td valign="top">user:</td>
+          <td>{{ username }}</td>
+        </tr>
+        <tr>
+          <td valign="top">karma:</td>
+          <td>{{ karma }}</td>
+        </tr>
+        {% if own_user %}
+        <tr>
+          <td valign="top">about:</td>
+          <td>
+            <textarea cols="60" rows="8" wrap="virtual" name="about">{{ about }}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">email:</td>
+          <td>
+            <input type="text" name="email" value="{{ email }}" size="60">
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td valign="top">about:</td>
+          <td>
+            <textarea cols="60" rows="8" wrap="virtual" name="about"
+                      disabled="disabled">{{ about }}</textarea>
+          </td>
+        </tr>
+        {% endif %}
+        <tr>
+          <td><a href="{% url 'submissions' user_id=user_id %}"><u>submissions</u></a></td>
+        </tr>
+        <tr>
+          <td><a href="{% url 'comments' user_id=user_id %}"><u>comments</u></a></td>
+        </tr>
+      </table>
+      {% if own_user %}
+      <br>
+      <input type="submit" value="update">
+      {% endif %}
+    </form>
+  </td>
+</tr>
+
+{% endblock %}

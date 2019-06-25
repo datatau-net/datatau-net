@@ -1,0 +1,84 @@
+{% extends 'common/base.html' %}
+{% load app_extras %}
+
+{% block title %}
+<title>Confirm | Hacker News</title>
+{% endblock %}
+
+{% block content_header %}
+<tr id="pagespace" title="Confirm" style="height:10px"></tr>
+{% endblock %}
+
+{% block content %}
+<table border="0">
+  <tr class='athing' id='{{ comment.id }}'>
+    <td class='ind'></td>
+    <td valign="top" class="votelinks">
+      <div class="center"><span class="asterisk">*</span><br>
+        <div style="width: 14px; height: 1px">
+        </div>
+      </div>
+    </td>
+    <td class="default">
+      <div style="margin-top:2px; margin-bottom:-10px;">
+        <span class="comhead">
+          <span class="score" id="score_{{ comment.id }}">
+              {{ post.votes }} point{{ post.votes|pluralize }}
+          </span> by
+            <a href="{% url 'profile' user_id=comment.user_id %}"
+               class="hnuser">{{ comment.user_id }}
+            </a>
+            <span class="age">
+                <a href="{% url 'comment' comment_id=comment.id %}">
+                    {{ comment.time_from_post }}
+                </a>
+            </span>
+            <span id="unv_{{ comment.id }}"></span>
+            <span class="par">
+                | {% if comment.reply %}
+                <a href="{% url 'comment' comment_id=comment.reply.id %}">parent</a>
+            {% else %}
+                <a href="{% url 'post' post_id=comment.post_id %}">parent</a>
+            {% endif %}
+            </span>
+
+            | <a href="{% url 'comment_edit' comment_id=comment.id %}">edit</a>
+            | <a href="{% url 'comment_delete' comment_id=comment.id %}">delete</a>
+            <a class="togg" n="{{ comment.comment_set.count|add:" 1" }}"
+               href="javascript:void(0)"
+               onclick="return toggle(event, {{ comment.id }})">
+
+          </a>
+          <span class='storyon'>
+                | on:
+                <a href="{% url 'post' post_id=comment.post_id %}">
+                    {% if comment.post.title|length > 50 %}
+                        {{ comment.post.title|truncatechars:50 }}
+                    {% else %}
+                        {{ comment.post.title }}
+                    {% endif %}
+                </a>
+            </span>
+        </span>
+      </div>
+      <br>
+      <div class="comment">
+        <span class="commtext c00">{{ comment.content }}</span>
+        <div class='reply'></div>
+      </div>
+    </td>
+  </tr>
+  <tr style="height:20px"></tr>
+  <tr>
+    <td colspan="2"></td>
+    <td>
+      <form method="post"
+            action="{% url 'comment_delete' comment_id=comment.id %}">
+        {% csrf_token %}
+        Do you want this to be deleted?
+        <br><br><input type="submit" name="delete" value="Yes">&nbsp;
+        <input type="submit" name="delete" value="No"></form>
+    </td>
+  </tr>
+</table>
+{% endblock %}
