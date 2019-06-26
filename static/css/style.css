@@ -528,6 +528,7 @@ pre {
 .center {
     display: block;
     text-align: -webkit-center;
+    text-align: -moz-center;
 }
 
 .asterisk {
