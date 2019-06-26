@@ -1,4 +1,6 @@
-# DataTau (.net version)
+# DataTau
+
+https://datatau.net
 
 ## Django based Hacker News clone
 
