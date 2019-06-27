@@ -5,7 +5,7 @@
     <table border='0'>
       <tr>
         <td class='ind'>
-          <div style="height:1px; width:{{ ind }}"></div>
+          <img src="s.gif" height="1px" width="{{ ind|default:'0' }}">
         </td>
         <td class="votelinks" valign="top">
           <div class="center">
@@ -42,7 +42,7 @@
                 | <a href="{% url 'comment_edit' comment_id=comment.id %}">edit</a>
                 | <a href="{% url 'comment_delete' comment_id=comment.id %}">delete</a>
                 {% endifequal %}
-                <a class="togg" n="{{ comment.comment_set.count|add:" 1" }}"
+                <a class="togg"
                    href="javascript:void(0)"
                    onclick="return toggle(event, {{ comment.id }})">[-]
             </a>
