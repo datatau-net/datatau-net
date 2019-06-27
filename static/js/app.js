@@ -52,3 +52,26 @@ function upvotePost(item) {
 function upvoteComment(item) {
     upvote(item, 'comment')
 }
+
+function getReplyTable(node) {
+    for( ; node && node !== document; node = node.parentNode ) {
+        if (node.tagName === "TABLE") {
+            return node.parentNode.children[1];
+        }
+    }
+    return null;
+}
+
+function toggle(event, node) {
+    var isCollapsed = node.getAttribute('data-collapsed');
+    var replyTable = getReplyTable(node);
+    if (isCollapsed === "false") {
+        node.setAttribute('data-collapsed', 'true');
+        node.innerText = '[+]';
+        replyTable.style.display = 'none';
+    } else {
+        node.setAttribute('data-collapsed', 'false');
+        node.innerText = '[-]';
+        replyTable.style.display = '';
+    }
+}

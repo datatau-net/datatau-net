@@ -44,7 +44,8 @@
                 {% endifequal %}
                 <a class="togg" n="{{ comment.comment_set.count|add:" 1" }}"
                    href="javascript:void(0)"
-                   onclick="return toggle(event, {{ comment.id }})">[-]
+                   data-collapsed="false"
+                   onclick="return toggle(event, this)">[-]
             </a>
             <span class='storyon'></span>
           </div>
@@ -59,7 +60,9 @@
         </td>
       </tr>
     </table>
+    <table border="0" class='comment-tree'>
+      {% include "comments/comments_tree.html" with root_comments=comment.comment_set.all ind=ind|add:"40" %}
+    </table>
   </td>
 </tr>
-{% include "comments/comments_tree.html" with root_comments=comment.comment_set.all ind=ind|add:"40" %}
 {% endfor %}
