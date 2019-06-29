@@ -5,7 +5,7 @@ from django.urls import reverse
 
 class LatestPostsFeed(Feed):
     title='DataTau - Latest Posts'
-    link='/feeds/'
+    link='/feed/'
     description='The latest posts on DataTau'
 
     def items(self):
