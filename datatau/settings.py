@@ -128,3 +128,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 PAGE_LIMIT = 30
 HOTTEST_DAY_LIMIT = 7
+
+# RSS Feed Settings
+TOP_N_ITEMS = 5 # Number of latest items to return in RSS feed
