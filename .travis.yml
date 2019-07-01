@@ -1,0 +1,8 @@
+language: python
+python:
+  - "3.6"
+install:
+  - pip install -r requirements.txt
+  - bash restart_db_dev.sh
+script:
+- python manage.py test dev
