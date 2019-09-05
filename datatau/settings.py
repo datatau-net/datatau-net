@@ -127,7 +127,13 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 PAGE_LIMIT = 30
-HOTTEST_DAY_LIMIT = 7
+HOTTEST_DAY_LIMIT = 15
 
 # RSS Feed Settings
 TOP_N_ITEMS = 5 # Number of latest items to return in RSS feed
+
+TWITTER_HOTTEST = 10
+
+CRONJOBS = [
+    ('0 10 * * *', 'app.cron.tweet_post', '>> /var/log/datatau/cron/tweet.log'),
+]
