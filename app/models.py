@@ -47,6 +47,7 @@ class Post(models.Model):
     show_dt = models.BooleanField(default=False)
     ask_dt = models.BooleanField(default=False)
     user = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
+    tweeted = models.BooleanField(default=False)
 
     def url_link(self):
         return mark_safe(f'<a href="{self.url}" target="_blank">{self.url}</a>')

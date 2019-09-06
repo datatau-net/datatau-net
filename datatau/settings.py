@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'accounts.apps.AccountsConfig',
     'app.apps.Config',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -115,9 +116,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, 'static'),
+#)
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
@@ -127,10 +128,16 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 PAGE_LIMIT = 30
-HOTTEST_DAY_LIMIT = 7
+HOTTEST_DAY_LIMIT = 15
 
 # RSS Feed Settings
 TOP_N_ITEMS = 5 # Number of latest items to return in RSS feed
 
 # Gravity (used by news ranking algorithm)
 G = 1.8
+
+# Twitter settings to tweet top post
+TWITTER_HOTTEST = 10
+CRONJOBS = [
+    ('0 10 * * *', 'app.cron.tweet_post', '>> /var/log/datatau/cron/tweet.log 2>&1'),
+]
