@@ -131,3 +131,6 @@ HOTTEST_DAY_LIMIT = 7
 
 # RSS Feed Settings
 TOP_N_ITEMS = 5 # Number of latest items to return in RSS feed
+
+# Gravity (used by news ranking algorithm)
+G = 1.8

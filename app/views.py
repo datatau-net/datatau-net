@@ -15,6 +15,7 @@ from django.utils import timezone
 from accounts.models import CustomUser
 from .models import Post, Comment, PostVoteTracking, CommentVoteTracking, parse_site
 
+
 def get_logger():
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
@@ -65,13 +66,23 @@ def get_page(page):
         return 1
 
 
+def post_sort_key(post_object):
+
+    # n_comments = post.comment_set.count()
+    # user_karma = post.user.karma
+    n_upvotes = post_object.votes
+    hours_since_submission = (timezone.now() - post_object.insert_date).seconds / 3600
+    score = (n_upvotes - 1) / (hours_since_submission + 2) ** settings.G
+    log.info(f"ranking score for post {post_object.title} is: {score}")
+    return score
+
+
 def get_hottest(page):
+
     now = timezone.now()
-    return Post.objects.filter(
-        insert_date__range=(now - timedelta(days=settings.HOTTEST_DAY_LIMIT), now)). \
-               annotate(num_comments=Count('comment')). \
-               order_by('-num_comments', '-votes', '-user__karma')[
-           (page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
+    all_posts = Post.objects.filter(insert_date__range=(now - timedelta(days=settings.HOTTEST_DAY_LIMIT), now))
+
+    return sorted(all_posts, key=post_sort_key)[(page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
 
 
 def index(request, page=None):
@@ -339,7 +350,6 @@ def comment_reply(request, comment_id):
 
 
 def comment_edit(request, comment_id, error=None):
-
     current_comment = Comment.objects.get(pk=comment_id)
     if request.user != current_comment.user:
         log.info(f'user {request.user.id} is not allowed to edit comment {comment_id}')
@@ -367,7 +377,6 @@ def comment_edit(request, comment_id, error=None):
 
 
 def comment_delete(request, comment_id, error=None):
-
     current_comment = Comment.objects.get(pk=comment_id)
     if request.user != current_comment.user:
         log.info(f'user {request.user.id} is not allowed to delete comment {comment_id}')
@@ -440,16 +449,15 @@ def upvote(request, item_str):
             return JsonResponse({'success': False, 'redirect': True})
 
 
-def site(request, site, page=None):
+def site(request, site_name, page=None):
     if request.method == 'GET':
         page = get_page(page)
 
-        posts = Post.objects.filter(site=site). \
-                    order_by('-insert_date')[
+        posts = Post.objects.filter(site=site_name).order_by('-insert_date')[
                 (page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
         tracking = get_tracking(request.user, posts)
 
-        return render_index_template(request, posts, tracking, 'site', page, {'site': site})
+        return render_index_template(request, posts, tracking, 'site', page, {'site': site_name})
 
 
 def new(request, page=None):
@@ -506,8 +514,8 @@ def comments(request, user_id, page=None):
         page = get_page(page)
 
         current_comments = Post.objects.filter(user__id=user_id). \
-                    order_by('-insert_date')[
-                (page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
+                               order_by('-insert_date')[
+                           (page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
 
         context = {'tracking': get_tracking(request.user, current_comments),
                    'root_comments': current_comments,
