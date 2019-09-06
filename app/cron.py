@@ -12,11 +12,16 @@ api = tweepy.API(auth)
 def tweet_post():
     hottest_posts = get_hottest(page=1)[0:settings.TWITTER_HOTTEST]
 
-    tweet_text = ''
+    target_post = None
     for post in hottest_posts:
         if not post.tweeted:
-            tweet_text = f'{post.title}: https://datatau.net/post/{post.id}'
+            target_post = post
             break
 
-    if tweet_text:
+    if target_post:
+        tweet_text = f'{target_post.title}: https://datatau.net/post/{target_post.id}'
         api.update_status(tweet_text)
+        
+        target_post.tweeted = True
+        target_post.save()
+
