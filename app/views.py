@@ -82,7 +82,8 @@ def get_hottest(page):
     now = timezone.now()
     all_posts = Post.objects.filter(insert_date__range=(now - timedelta(days=settings.HOTTEST_DAY_LIMIT), now))
 
-    return sorted(all_posts, key=post_sort_key)[(page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
+    return sorted(all_posts, key=post_sort_key, reverse=True)[(page - 1)
+                                                              * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
 
 
 def index(request, page=None):
