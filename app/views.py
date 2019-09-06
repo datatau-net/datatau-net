@@ -187,7 +187,6 @@ def submit(request):
             return render(request, 'posts/submit.html', context={'errors': True})
 
         user = request.user
-        user.karma += 1
         user.save()
 
         current_post = Post(title=title, url=url, user=user)
