@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 
@@ -38,6 +39,7 @@ urlpatterns = [
     path('ask/<int:page>', views.ask, name='ask_more'),
     path('show', views.show, name='show'),
     path('show/<int:page>', views.show, name='show_more'),
+    path('api/post', csrf_exempt(views.api_post), name='post'),
     path('under-construction', views.under_construction, name='under_construction'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),

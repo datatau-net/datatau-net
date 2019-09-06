@@ -5,12 +5,12 @@ from datetime import timedelta
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db.models import Count
 from django.db.utils import IntegrityError
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from ratelimit.decorators import ratelimit
 
 from accounts.models import CustomUser
 from .models import Post, Comment, PostVoteTracking, CommentVoteTracking, parse_site
@@ -67,7 +67,6 @@ def get_page(page):
 
 
 def post_sort_key(post_object):
-
     # n_comments = post.comment_set.count()
     # user_karma = post.user.karma
     n_upvotes = post_object.votes
@@ -78,9 +77,9 @@ def post_sort_key(post_object):
 
 
 def get_hottest(page):
-
     now = timezone.now()
-    all_posts = Post.objects.filter(insert_date__range=(now - timedelta(days=settings.HOTTEST_DAY_LIMIT), now))
+    all_posts = Post.objects.filter(
+        insert_date__range=(now - timedelta(days=settings.HOTTEST_DAY_LIMIT), now))
 
     return sorted(all_posts, key=post_sort_key, reverse=True)[(page - 1)
                                                               * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
@@ -107,6 +106,7 @@ def profile(request, user_id):
                 'karma': user.karma,
                 'about': user.about,
                 'email': user.email,
+                'api_key': user.api_key,
                 'own_user': True
             }
         else:
@@ -450,15 +450,15 @@ def upvote(request, item_str):
             return JsonResponse({'success': False, 'redirect': True})
 
 
-def site(request, site_name, page=None):
+def site(request, site, page=None):
     if request.method == 'GET':
         page = get_page(page)
 
-        posts = Post.objects.filter(site=site_name).order_by('-insert_date')[
+        posts = Post.objects.filter(site=site).order_by('-insert_date')[
                 (page - 1) * settings.PAGE_LIMIT:settings.PAGE_LIMIT * page]
         tracking = get_tracking(request.user, posts)
 
-        return render_index_template(request, posts, tracking, 'site', page, {'site': site_name})
+        return render_index_template(request, posts, tracking, 'site', page, {'site': site})
 
 
 def new(request, page=None):
@@ -528,3 +528,63 @@ def comments(request, user_id, page=None):
 
 def under_construction(request):
     return render(request, 'common/under_construction.html')
+
+
+def get_json_data(body):
+    if 'api_key' not in body or not body['api_key']:
+        raise Exception('no api_key provided')
+    else:
+        api_key = body['api_key']
+        user_query = CustomUser.objects.filter(api_key=api_key)
+        if not user_query:
+            raise Exception(f'no user matches with this api_key: {api_key}')
+        else:
+            user = user_query[0]
+            log.info(f'user {user.username} is posting via API')
+
+    if 'title' not in body or not body['title']:
+        raise Exception('no title provided')
+    else:
+        title = body['title']
+
+    if 'url' not in body:
+        url = ''
+    else:
+        try:
+            parse_site(body['url'])
+            url = body['url']
+        except IndexError:
+            raise Exception(f'no consistent url: {body["url"]}')
+
+    if 'text' not in body:
+        text = ''
+    else:
+        text = body['text']
+
+    if not url and not text:
+        raise Exception('no url or text provided')
+
+    return user, title, url, text
+
+
+@ratelimit(key='ip', rate='10/h', block=True)
+def api_post(request):
+    if request.method == 'POST':
+        body = json.loads(request.body)
+
+        try:
+            user, title, url, text = get_json_data(body)
+        except Exception as ex:
+            log.error(ex)
+            return JsonResponse({'success': False, 'error': str(ex)})
+
+        current_post = Post(title=title, url=url, user=user)
+        current_post.save()
+
+        log.info(f'post {title} submitted')
+
+        if text:
+            current_comment = Comment(content=text, user=user, post=current_post)
+            current_comment.save()
+
+        return JsonResponse({'success': True})

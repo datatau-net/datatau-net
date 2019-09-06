@@ -1,5 +1,6 @@
 import logging
 import re
+import secrets
 
 import django
 from django.contrib.auth import authenticate
@@ -84,6 +85,8 @@ def check_signup(request):
         else:
             user = CustomUser(username=username)
             user.set_password(password)
+            user.api_key = secrets.token_urlsafe(15)
+
             user.save()
             log.info(f'{username} has just sign up')
 
