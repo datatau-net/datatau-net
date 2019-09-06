@@ -67,10 +67,14 @@ def get_page(page):
 
 
 def post_sort_key(post_object):
-    # n_comments = post.comment_set.count()
-    # user_karma = post.user.karma
     n_upvotes = post_object.votes
-    hours_since_submission = (timezone.now() - post_object.insert_date).seconds / 3600
+
+    lapse = timezone.now() - post_object.insert_date
+    days = lapse.days
+    hours, remainder = divmod(lapse.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    hours_since_submission = days * 24 + hours + minutes / 60 + seconds / 3600
+
     score = (n_upvotes - 1) / (hours_since_submission + 2) ** settings.G
     log.info(f"ranking score for post {post_object.title} is: {score}")
     return score
@@ -183,7 +187,6 @@ def submit(request):
             return render(request, 'posts/submit.html', context={'errors': True})
 
         user = request.user
-        user.karma += 1
         user.save()
 
         current_post = Post(title=title, url=url, user=user)
