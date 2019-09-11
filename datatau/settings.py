@@ -81,7 +81,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -131,13 +130,38 @@ PAGE_LIMIT = 30
 HOTTEST_DAY_LIMIT = 15
 
 # RSS Feed Settings
-TOP_N_ITEMS = 5 # Number of latest items to return in RSS feed
+TOP_N_ITEMS = 5  # Number of latest items to return in RSS feed
 
 # Gravity (used by news ranking algorithm)
 G = 1.8
 
 # Twitter settings to tweet top post
 TWITTER_HOTTEST = 10
+
+# Twitter keys of the publisher account
+TWITTER_KEYS = {
+    'CONSUMER_KEY': '',
+    'CONSUMER_SECRET': '',
+    'ACCESS_TOKEN': '',
+    'ACCESS_SECRET': '',
+}
+
+# Dictionary of  of users that will retweet publisher tweets
+TWITTER_RETWEET_KEYS = {
+    'user1': {
+        'CONSUMER_KEY': '',
+        'CONSUMER_SECRET': '',
+        'ACCESS_TOKEN': '',
+        'ACCESS_SECRET': '',
+    },
+    'user2': {
+        'CONSUMER_KEY': '',
+        'CONSUMER_SECRET': '',
+        'ACCESS_TOKEN': '',
+        'ACCESS_SECRET': '',
+    },
+}
+
 CRONJOBS = [
     ('0 10 * * *', 'app.cron.tweet_post', '>> /var/log/datatau/cron/tweet.log 2>&1'),
 ]
