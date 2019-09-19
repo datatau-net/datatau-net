@@ -44,4 +44,3 @@ bash restart_db_dev.sh
 ```
 
 * Open development url: http://0.0.0.0:8000
-
