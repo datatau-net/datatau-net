@@ -51,12 +51,12 @@ bash restart_db_dev.sh
   <tr>
     <td align="center"><a href="https://davidadrian.cc"><img
         src="https://avatars3.githubusercontent.com/u/6515763?s=400&v=4" width="100px;"
-        alt="https://davidadrian.cc"/><br><img  height="15px"><sub><b>David Cañones Ⓖ</b></sub></a><br></td>
+        alt="https://davidadrian.cc"/><br><sub><b>David Cañones Ⓖ</b></sub></a><br></td>
     <td align="center"><a href="https://pedro-munoz.tech"><img
         src="https://avatars3.githubusercontent.com/u/34843649?s=400&v=4" width="100px;"
-        alt="https://pedro-munoz.tech"/><br><img  height="15px"><sub><b>Pedro Muñoz Ⓖ</b></sub></a><br></td>
+        alt="https://pedro-munoz.tech"/><br><sub><b>Pedro Muñoz Ⓖ</b></sub></a><br></td>
     <td align="center"><a href="http://ravimashru.wordpress.com"><img
         src="https://avatars3.githubusercontent.com/u/8961232?s=400&v=4" width="100px;"
-        alt="http://ravimashru.wordpress.com"/><br><img  height="15px"><sub><b>Ravi Mashru</b></sub></a><br></td>
+        alt="http://ravimashru.wordpress.com"/><br><sub><b>Ravi Mashru</b></sub></a><br></td>
   </tr>
 </table>
