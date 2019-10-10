@@ -58,5 +58,8 @@ bash restart_db_dev.sh
     <td align="center"><a href="http://ravimashru.wordpress.com"><img
         src="https://avatars3.githubusercontent.com/u/8961232?s=400&v=4" width="100px;"
         alt="http://ravimashru.wordpress.com"/><br><sub><b>Ravi Mashru</b></sub></a><br></td>
+    <td align="center"><a href="https://aalonso.eu"><img
+        src="https://avatars0.githubusercontent.com/u/14878189?s=460&amp;v=4" width="100px;"
+        alt="https://aalonso.eu"/><br><sub><b>Aitor Alonso</b></sub></a><br></td>
   </tr>
 </table>
