@@ -76,7 +76,7 @@ def post_sort_key(post_object):
     hours_since_submission = days * 24 + hours + minutes / 60 + seconds / 3600
 
     score = (n_upvotes - 1) / (hours_since_submission + 2) ** settings.G
-    log.info(f"ranking score for post {post_object.title} is: {score}")
+    # log.info(f"ranking score for post {post_object.title} is: {score}")
     return score
 
 
