@@ -1,4 +1,4 @@
-Django==2.2.4
+Django==2.2.8
 tweepy==3.8.0
 django-crontab==0.7.1
 gunicorn==19.9.0
