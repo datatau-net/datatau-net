@@ -162,6 +162,4 @@ TWITTER_RETWEET_KEYS = {
     },
 }
 
-CRONJOBS = [
-    ('0 10 * * *', 'app.cron.tweet_post', '>> /var/log/datatau/cron/tweet.log 2>&1'),
-]
+CRONJOBS = []

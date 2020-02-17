@@ -2,5 +2,5 @@ Django==2.2.2
 tweepy==3.8.0
 django-crontab==0.7.1
 gunicorn==19.9.0
-psycopg2==2.8.3
+psycopg2-binary==2.8.3
 django-ratelimit==2.0.0

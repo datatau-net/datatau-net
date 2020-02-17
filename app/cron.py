@@ -3,6 +3,7 @@ import logging
 import tweepy
 from django.conf import settings
 
+from accounts.models import CustomUser
 from .views import get_hottest
 
 twitter_keys = settings.TWITTER_KEYS
@@ -22,7 +23,7 @@ def get_logger():
     return logger
 
 
-log = get_logger()
+logger = get_logger()
 
 
 def get_api(keys):
@@ -39,7 +40,7 @@ api = get_api(twitter_keys)
 
 def retweet_post(status, keys_dict):
     for user in keys_dict:
-        log.info(f'user {user} retweeting...')
+        logger.info(f'user {user} retweeting...')
         user_api = get_api(keys_dict[user])
 
         user_api.retweet(status.id)
@@ -47,7 +48,7 @@ def retweet_post(status, keys_dict):
 
 
 def tweet_post():
-    log.info('getting hottests posts...')
+    logger.info('getting hottests posts...')
     hottest_posts = get_hottest(page=1)[0:settings.TWITTER_HOTTEST]
 
     target_post = None
@@ -58,17 +59,27 @@ def tweet_post():
 
     if target_post:
         tweet_text = f'{target_post.title}: https://datatau.net/post/{target_post.id}'
-        log.info(f'tweet to post: {tweet_text}')
+        logger.info(f'tweet to post: {tweet_text}')
 
         status = api.update_status(tweet_text)
 
-        log.info('tweet posting success')
+        logger.info('tweet posting success')
         target_post.tweeted = True
         target_post.save()
 
-        log.info('retweeting and liking...')
+        logger.info('retweeting and liking...')
         retweet_post(status, twitter_retweet_keys)
 
-        log.info('tweet retweeting success')
+        logger.info('tweet retweeting success')
     else:
-        log.info('all hot posts already tweeted')
+        logger.info('all hot posts already tweeted')
+
+
+def remove_troll_posts():
+    logger.info('removing trol posts...')
+
+    trolls = CustomUser.objects.filter(is_trol=True)
+
+    for troll in trolls:
+        logger.info(f'removing posts from user {troll.username}...')
+        troll.post_set.all().delete()

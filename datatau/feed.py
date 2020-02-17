@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.contrib.syndication.views import Feed
-from app.models import Post
 from django.urls import reverse
 
+from app.models import Post
+
+
 class LatestPostsFeed(Feed):
-    title='DataTau - Latest Posts'
-    link='/feed/'
-    description='The latest posts on DataTau'
+    title = 'DataTau - Latest Posts'
+    link = '/feed/'
+    description = 'The latest posts on DataTau'
 
     def items(self):
         return Post.objects.order_by('-insert_date')[:settings.TOP_N_ITEMS]
