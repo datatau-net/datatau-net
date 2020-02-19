@@ -81,5 +81,6 @@ def remove_troll_posts():
     trolls = CustomUser.objects.filter(is_troll=True)
 
     for troll in trolls:
-        logger.info(f'removing posts from user {troll.username}...')
-        troll.post_set.all().delete()
+        posts = troll.post_set.all()
+        logger.info(f'removing {len(posts)} posts from user {troll.username}...')
+        posts.delete()
