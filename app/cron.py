@@ -78,7 +78,7 @@ def tweet_post():
 def remove_troll_posts():
     logger.info('removing trol posts...')
 
-    trolls = CustomUser.objects.filter(is_trol=True)
+    trolls = CustomUser.objects.filter(is_troll=True)
 
     for troll in trolls:
         logger.info(f'removing posts from user {troll.username}...')
