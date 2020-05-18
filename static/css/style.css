@@ -534,3 +534,9 @@ pre {
 .asterisk {
     color: #00b4b4;
 }
+
+#banner {
+    background: black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
