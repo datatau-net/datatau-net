@@ -110,7 +110,6 @@ def profile(request, user_id):
                 'karma': user.karma,
                 'about': user.about,
                 'email': user.email,
-                'api_key': user.api_key,
                 'own_user': True
             }
         else:
@@ -139,11 +138,19 @@ def update_profile(request, user_id):
     if request.method == 'POST':
         body = request.POST
 
+        updated_profile = False
+
         user = request.user
         if 'about' in body:
             user.about = body['about']
+            updated_profile = True
+
+        invalid_email = True
         if 'email' in body and validate_user_email(body['email']):
             user.email = body['email']
+            invalid_email = False
+            updated_profile = True
+
         user.save()
 
         log.info(f'Profile {user.username} updated')
@@ -154,6 +161,8 @@ def update_profile(request, user_id):
             'karma': user.karma,
             'about': user.about,
             'email': user.email,
+            'invalid_email': invalid_email,
+            'updated_profile': updated_profile,
             'own_user': True
         }
         return render(request, 'user/profile.html', context=context)
