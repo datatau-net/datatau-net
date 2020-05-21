@@ -1,38 +1,38 @@
 <html lang="en">
 
 <head>
-    <meta name="referrer" content="origin">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico">
+  <meta name="referrer" content="origin">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="favicon.ico">
 </head>
 
 <style>
-    .errors {
-        color: red;
-        margin-bottom: 20px;
-    }
+  .errors {
+    color: red;
+    margin-bottom: 20px;
+  }
 </style>
 
 <body>
 
 <b>Login</b><br><br>
 <form method="post" action="{% url 'check_login' %}">
-    {% csrf_token %}
-    <table border="0">
-        <tr>
-            <td>username:</td>
-            <td><input type="text" name="username" size="20" autocorrect="off" spellcheck="false"
-                       autocapitalize="off"
-                       autofocus="true"></td>
-        </tr>
-        <tr>
-            <td>password:</td>
-            <td><input type="password" name="password" size="20"></td>
-        </tr>
-    </table>
-    <br>
-    <input type="hidden" name="next" value="{{ next }}"/>
-    <input type="submit" value="login">
+  {% csrf_token %}
+  <table border="0">
+    <tr>
+      <td>username:</td>
+      <td><input type="text" name="username" size="20" autocorrect="off" spellcheck="false"
+                 autocapitalize="off"
+                 autofocus="true"></td>
+    </tr>
+    <tr>
+      <td>password:</td>
+      <td><input type="password" name="password" size="20"></td>
+    </tr>
+  </table>
+  <br>
+  <input type="hidden" name="next" value="{{ next }}"/>
+  <input type="submit" value="login">
 </form>
 
 <div class="errors">{{ error_login }}</div>
@@ -41,21 +41,25 @@
 
 <b>Create Account</b><br><br>
 <form method="post" action="{% url 'check_signup' %}">
-    {% csrf_token %}
-    <table border="0">
-        <tr>
-            <td>username:</td>
-            <td><input type="text" name="username" size="20" autocorrect="off" spellcheck="false"
-                       autocapitalize="off" value="{{ username }}"></td>
-        </tr>
-        <tr>
-            <td>password:</td>
-            <td><input type="password" name="password" size="20" value="{{ password }}"></td>
-        </tr>
-    </table>
-    <br>
-    <input type="hidden" name="next" value="{{ next }}"/>
-    <input type="submit" value="signup">
+  {% csrf_token %}
+  <table border="0">
+    <tr>
+      <td>username:</td>
+      <td><input type="text" name="username" size="20" autocorrect="off" spellcheck="false"
+                 autocapitalize="off" value="{{ username }}"></td>
+    </tr>
+    <tr>
+      <td>email:</td>
+      <td><input type="email" name="email" size="20" value="{{ email }}"></td>
+    </tr>
+    <tr>
+      <td>password:</td>
+      <td><input type="password" name="password" size="20" value="{{ password }}"></td>
+    </tr>
+  </table>
+  <br>
+  <input type="hidden" name="next" value="{{ next }}"/>
+  <input type="submit" value="signup">
 
 </form>
 
