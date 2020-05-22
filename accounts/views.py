@@ -69,6 +69,14 @@ def check_regex(pattern, to_check):
         return False
 
 
+def check_existing_email(email):
+    user_set = CustomUser.objects.filter(email=email, is_active=True)
+    if len(user_set) > 0:
+        return True
+    else:
+        return False
+
+
 def check_signup(request):
     if request.method == 'POST':
         body = request.POST
@@ -98,7 +106,7 @@ def check_signup(request):
             return render(request, 'registration/login.html',
                           context={'error_signup': f'not valid email: {email}',
                                    'next': next_url})
-        elif len(CustomUser.objects.filter(email=email)) > 0:
+        elif check_existing_email(email):
             log.info(f'email {email} already exists')
             return render(request, 'registration/login.html',
                           context={'error_signup': f'email {email} already exists for an user, please try to login',
