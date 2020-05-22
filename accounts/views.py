@@ -36,7 +36,14 @@ def check_login(request):
         password = body['password']
         next_url = body['next']
 
-        user = authenticate(username=username, password=password)
+        user = None
+        if validate_user_email(username):
+            user_set = CustomUser.objects.filter(email=username)
+
+            if len(user_set) == 1:
+                user = authenticate(username=user_set[0].username, password=password)
+        else:
+            user = authenticate(username=username, password=password)
 
         if user is None:
             log.info(f'{username} cannot be authenticated')
@@ -91,8 +98,13 @@ def check_signup(request):
             return render(request, 'registration/login.html',
                           context={'error_signup': f'not valid email: {email}',
                                    'next': next_url})
+        elif len(CustomUser.objects.filter(email=email)) > 0:
+            log.info(f'email {email} already exists')
+            return render(request, 'registration/login.html',
+                          context={'error_signup': f'email {email} already exists for an user, please try to login',
+                                   'next': next_url})
         else:
-            user = CustomUser(username=username)
+            user = CustomUser(username=username, email=email)
             user.set_password(password)
             user.api_key = secrets.token_urlsafe(15)
             user.is_active = False
