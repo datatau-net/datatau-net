@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.db.utils import IntegrityError
 from django.http import HttpResponse
@@ -134,6 +135,17 @@ def validate_user_email(email):
         return False
 
 
+def send_confirmation_email(user):
+    confirmation_email_text = f"""Hi {user.username},\n\nHere is the link to activate your DataTau account:\n\nhttps://datatau.net/accounts/login/activate/{user.id}/{user.api_key}\n\nWelcome to the coolest Data Science community!\n\nBR,\n\nDavid & Pedro"""
+    send_mail(
+        subject=f'Confirmation email from datatau.net',
+        message=confirmation_email_text,
+        from_email='info@datatau.net',
+        recipient_list=[user.email],
+        fail_silently=False
+    )
+
+
 def update_profile(request, user_id):
     if request.method == 'POST':
         body = request.POST
@@ -148,8 +160,15 @@ def update_profile(request, user_id):
         invalid_email = True
         if 'email' in body and validate_user_email(body['email']):
             user.email = body['email']
-            invalid_email = False
-            updated_profile = True
+            user.is_active = False
+
+            user.save()
+
+            log.info(f'{user.username} has just updated his email, sending confirmation email...')
+            send_confirmation_email(user)
+
+            return HttpResponse(
+                "<h1>Email successfully updated!</h1><p>We've just sent you a confirmation email. Please check your inbox and click on the confirmation link :)</p>")
 
         user.save()
 

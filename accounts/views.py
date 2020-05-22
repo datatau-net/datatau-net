@@ -77,6 +77,17 @@ def check_existing_email(email):
         return False
 
 
+def send_confirmation_email(user):
+    confirmation_email_text = f"""Hi {user.username},\n\nHere is the link to activate your DataTau account:\n\nhttps://datatau.net/accounts/login/activate/{user.id}/{user.api_key}\n\nWelcome to the coolest Data Science community!\n\nBR,\n\nDavid & Pedro"""
+    send_mail(
+        subject=f'Confirmation email from datatau.net',
+        message=confirmation_email_text,
+        from_email='info@datatau.net',
+        recipient_list=[user.email],
+        fail_silently=False
+    )
+
+
 def check_signup(request):
     if request.method == 'POST':
         body = request.POST
@@ -119,15 +130,7 @@ def check_signup(request):
 
             user.save()
             log.info(f'{username} has just sign up, sending confirmation email...')
-
-            confirmation_email_text = f"""Hi {user.username},\n\nHere is the link to activate your DataTau account:\n\nhttps://datatau.net/accounts/login/activate/{user.id}/{user.api_key}\n\nWelcome to the coolest Data Science community!\n\nBR,\n\nDavid & Pedro"""
-            send_mail(
-                subject=f'Confirmation email from datatau.net',
-                message=confirmation_email_text,
-                from_email='info@datatau.net',
-                recipient_list=[email],
-                fail_silently=False
-            )
+            send_confirmation_email(user)
 
             return HttpResponse(
                 "<h1>Congrats!</h1><p>You're just one step away to join the DataTau community.</p><p>We've just sent you a confirmation email. Please check your inbox and click on the confirmation link :)</p>")

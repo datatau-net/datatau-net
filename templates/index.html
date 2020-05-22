@@ -18,23 +18,24 @@
         <div style="width: 14px; height: 1px"></div>
         {% else %}
         {% if post.id in tracking %}
-        <a id="up_{{ post.id }}" onclick="upvotePost(this)">
-          <div class='votearrow' title='upvote'
-               style='visibility: hidden'></div>
-        </a>
+          <a id="up_{{ post.id }}" onclick="upvotePost(this)">
+            <div class='votearrow' title='upvote'
+                 style='visibility: hidden'></div>
+          </a>
         {% else %}
-        <a id="up_{{ post.id }}" onclick="upvotePost(this)" style="cursor: pointer">
-          <div class='votearrow' title='upvote'></div>
-        </a>
+          <a id="up_{{ post.id }}" onclick="upvotePost(this)" style="cursor: pointer">
+            <div class='votearrow' title='upvote'></div>
+          </a>
         {% endif %}
         {% endifequal %}
       </div>
     </td>
     <td class="title">
       {% if post.url %}
-      <a href="{{ post.url }}" title="{{ post.title }}" id="title_{{ post.id }}" class="storylink">{{ post.title }}</a>
+        <a href="{{ post.url }}" title="{{ post.title }}" id="title_{{ post.id }}"
+           class="storylink">{{ post.title }}</a>
       {% else %}
-      <a href="{% url 'post' post_id=post.id %}" class="storylink">{{ post.title }}</a>
+        <a href="{% url 'post' post_id=post.id %}" class="storylink">{{ post.title }}</a>
       {% endif %}
       <span class="sitebit comhead"> (<a href="{% url 'site' site=post.site %}"><span
           class="sitestr">{{ post.site }}</span></a>)</span>
@@ -51,14 +52,14 @@
       <a class="age" href="{% url 'post' post_id=post.id %}">{{ post.time_from_post }}</a> |
       <a href="{% url 'post' post_id=post.id %}">
         {% if post.comment_set.exists %}
-        {{ post.comment_set.count }} comment{{ post.comment_set.count|pluralize }}
+          {{ post.comment_set.count }} comment{{ post.comment_set.count|pluralize }}
         {% else %}
-        discuss
+          discuss
         {% endif %}
       </a>
       {% ifequal post.user request.user %}
-      | <a href="{% url 'post_edit' post_id=post.id %}">edit</a> |
-      <a href="{% url 'post_delete' post_id=post.id %}">delete</a>
+        | <a href="{% url 'post_edit' post_id=post.id %}">edit</a> |
+        <a href="{% url 'post_delete' post_id=post.id %}">delete</a>
       {% endifequal %}
     </td>
   </tr>
@@ -91,4 +92,15 @@
   </tr>
 
 </table>
+
+{# confirm dialog for getting mails #}
+{% if request.user.id and not request.user.email %}
+<script>
+    var confirmAnswer = confirm("Hi {{ request.user }}, sorry for disturbing. We've notice that you are a registered user but you haven't filled the email field on your profile. Please fill it ASAP as we're migrating DataTau to email login only... Thanks for your understanding :)");
+    if (confirmAnswer) {
+        window.location = "{% url 'profile' user_id=request.user.id %}";
+    }
+</script>
+{% endif %}
+
 {% endblock %}
