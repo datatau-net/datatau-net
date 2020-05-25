@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('username', 'email', 'is_active', 'is_troll', 'date_joined',)
     list_filter = ('is_active', 'is_troll',)
 
-    ordering = ('date_joined',)
+    ordering = ('-date_joined',)
 
 
 UserAdmin.fieldsets += (('Extra info', {'fields': ('is_troll',)}),)
