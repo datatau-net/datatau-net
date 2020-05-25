@@ -19,7 +19,7 @@ from django.http import HttpResponse
 from .feed import LatestPostsFeed
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('nimdatatau/', admin.site.urls),
     path('accounts/login/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('feed/', LatestPostsFeed(), name='latest_feed'),
