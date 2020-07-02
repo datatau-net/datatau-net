@@ -537,6 +537,7 @@ pre {
 
 #banner {
     background: black;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 20px;
+    text-align: center;
+    color: white;
 }

@@ -4,15 +4,15 @@
 
 <head>
 
-    {% block title %}
-        <title>DataTau - Hacker News Clone - Data Science Newsboard</title>
-    {% endblock %}
+  {% block title %}
+    <title>DataTau - Hacker News Clone - Data Science Newsboard</title>
+  {% endblock %}
 
-    <link rel="canonical" href="https://datatau.net">
+  <link rel="canonical" href="https://datatau.net">
 
-    {% include 'common/analytics.html' %}
-    {% include 'common/metadata.html' %}
-    {% include 'common/style.html' %}
+  {% include 'common/analytics.html' %}
+  {% include 'common/metadata.html' %}
+  {% include 'common/style.html' %}
 
 </head>
 
@@ -20,26 +20,26 @@
 
 <!-- Google Tag Manager (noscript) -->
 <noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5N66FM9"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5N66FM9"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <div class="center">
-    <table bgcolor="#f6f6ef" border="0" cellpadding="0" cellspacing="0" id="hnmain" width="85%">
-        <tr>
-            <td bgcolor="#00b4b4">
-                <table border="0" cellpadding="0" cellspacing="0" style="padding:2px" width="100%">
-                    <tr>
-                        <td style="width:18px;padding-right:4px">
-                            <a href="/">
-                                <img alt="DataTau logo"
-                                     height="18" src="{% static '/img/datatau.png' %}"
-                                     style="border:1px white solid;"
-                                     width="18">
-                            </a>
-                        </td>
-                        <td style="line-height:12pt; height:10px;">
+  <table bgcolor="#f6f6ef" border="0" cellpadding="0" cellspacing="0" id="hnmain" width="85%">
+    <tr>
+      <td bgcolor="#00b4b4">
+        <table border="0" cellpadding="0" cellspacing="0" style="padding:2px" width="100%">
+          <tr>
+            <td style="width:18px;padding-right:4px">
+              <a href="/">
+                <img alt="DataTau logo"
+                     height="18" src="{% static '/img/datatau.png' %}"
+                     style="border:1px white solid;"
+                     width="18">
+              </a>
+            </td>
+            <td style="line-height:12pt; height:10px;">
               <span class="pagetop">
                     <h1 class="hnname"><a href="/">DataTau</a></h1>
 
@@ -48,48 +48,52 @@
                     <a href="{% url 'show' %}">show</a> |
                     <a href="{% url 'submit' %}">submit</a>
               </span>
-                        </td>
-                        <td style="text-align:right;padding-right:4px;">
+            </td>
+            <td style="text-align:right;padding-right:4px;">
               <span class="pagetop">
                 {% if user.is_authenticated %}
-                    <a id='me'
-                       href="{% url 'profile' user_id=user.id %}">{{ user.username }}</a>
-                    ({{ user.karma }})
-                    | <a id='logout' href="{% url 'logout' %}">logout</a>
+                  <a id='me'
+                     href="{% url 'profile' user_id=user.id %}">{{ user.username }}</a>
+                  ({{ user.karma }})
+                  | <a id='logout' href="{% url 'logout' %}">logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}">login</a>
+                  <a href="{% url 'login' %}">login</a>
                 {% endif %}
               </span>
-                        </td>
-                    </tr>
-                </table>
             </td>
-        </tr>
-        <tr>
-            <td>
-                <a href="https://whiteboxml.com" target="_blank">
-                    <video src={% static "/video/banner.mp4" %} loop muted autoplay width="100%" height="75px"
-                           id="banner"></video>
-                </a>
-            </td>
-        </tr>
-        <tr id="pagespace" style="height:10px" title=""></tr>
-        <tr>
-            <td>
-                {% block content %}
-                {% endblock %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div style="height: 10px"></div>
-                <table cellpadding="1" cellspacing="0" width="100%">
-                    <tr>
-                        <td bgcolor="#00b4b4"></td>
-                    </tr>
-                </table>
-                <br>
-                <div class="center">
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="https://datamentor.help" target="_blank">
+          {#                    <video src={% static "/video/banner.mp4" %} loop muted autoplay width="100%" height="75px"#}
+          {#                           id="banner"></video>#}
+          <div id="banner">
+            <h2>Looking for Data Science Mentoring / Advising?</h2>
+            <h1>datamentor.help 💡💪</h1>
+          </div>
+        </a>
+      </td>
+    </tr>
+    <tr id="pagespace" style="height:10px" title=""></tr>
+    <tr>
+      <td>
+        {% block content %}
+        {% endblock %}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div style="height: 10px"></div>
+        <table cellpadding="1" cellspacing="0" width="100%">
+          <tr>
+            <td bgcolor="#00b4b4"></td>
+          </tr>
+        </table>
+        <br>
+        <div class="center">
             <span class="yclinks">
               <a href="https://thegurus.tech">Made with ❤️ by The Gurus</a> |
               <a href="mailto:contact@datatau.net">Support</a> |
@@ -97,10 +101,10 @@
               <a href="{% url 'latest_feed' %}">RSS</a> |
               <a rel="noopener noreferrer" target="_blank" href="https://twitter.com/datatau_net">Twitter</a>
             </span><br><br>
-                </div>
-            </td>
-        </tr>
-    </table>
+        </div>
+      </td>
+    </tr>
+  </table>
 </div>
 </body>
 
